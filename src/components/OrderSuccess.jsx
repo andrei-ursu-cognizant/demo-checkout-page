@@ -29,13 +29,19 @@ export default function OrderSuccess({ details, orderInfo }) {
 
       <h4>Delivery</h4>
       <div className="address-display">
-        <div>{delivery.type === "store" ? "Collection at:" : "Delivery to:"}</div>
-        <div style={{ marginTop: 6 }}>{delivery.selected || "(no address)"}</div>
+        <div>
+          {delivery.type === "store" ? "Collection at:" : "Delivery to:"}
+        </div>
+        <div style={{ marginTop: 6 }}>
+          {delivery.selected || "(no address)"}
+        </div>
         {delivery.type === "store" && delivery.pickupDate && (
           <div className="small">Collection date: {delivery.pickupDate}</div>
         )}
         {delivery.type === "home" && (
-          <div className="small">Method: {delivery.deliveryOpt || "standard"}</div>
+          <div className="small">
+            Method: {delivery.deliveryOpt || "standard"}
+          </div>
         )}
       </div>
 

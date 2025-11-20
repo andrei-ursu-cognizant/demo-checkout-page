@@ -59,7 +59,12 @@ export default function Delivery({ data, onSelect, onContinue }) {
   }
 
   function applyDelivery() {
-    onSelect({ type: tab, selected: selectedByTab[tab], deliveryOpt, pickupDate });
+    onSelect({
+      type: tab,
+      selected: selectedByTab[tab],
+      deliveryOpt,
+      pickupDate,
+    });
   }
 
   const upcomingDates = [
@@ -103,7 +108,7 @@ export default function Delivery({ data, onSelect, onContinue }) {
         </div>
       </div>
 
-  {!selectedByTab[tab] && (
+      {!selectedByTab[tab] && (
         <>
           <div className="form-row">
             <label>Postcode or city</label>
@@ -161,11 +166,19 @@ export default function Delivery({ data, onSelect, onContinue }) {
                 suggestions.map((s) => (
                   <div
                     key={s}
-                    className={`suggestion ${modalSelected === s ? "selected" : ""}`}
+                    className={`suggestion ${
+                      modalSelected === s ? "selected" : ""
+                    }`}
                     onClick={() => handleModalSelect(s)}
                     role="button"
                   >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
                       <div>{s}</div>
                       <div>
                         <input
@@ -182,7 +195,11 @@ export default function Delivery({ data, onSelect, onContinue }) {
             </div>
 
             <div style={{ marginTop: 12, textAlign: "right" }}>
-              <button className="btn secondary" onClick={() => setShowModal(false)} style={{ marginRight: 8 }}>
+              <button
+                className="btn secondary"
+                onClick={() => setShowModal(false)}
+                style={{ marginRight: 8 }}
+              >
                 Cancel
               </button>
               <button className="btn" onClick={confirmModalSelection}>

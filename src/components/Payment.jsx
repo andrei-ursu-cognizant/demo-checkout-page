@@ -110,7 +110,10 @@ export default function Payment({ onOrderPlaced }) {
               ? "PayPal payment method selected (demo)"
               : "Apple Pay payment method selected (demo)"}
             <div style={{ marginTop: 12 }}>
-              <button className="btn" onClick={() => handleOrderPlaced({ method })}>
+              <button
+                className="btn"
+                onClick={() => handleOrderPlaced({ method })}
+              >
                 PLACE ORDER
               </button>
             </div>
