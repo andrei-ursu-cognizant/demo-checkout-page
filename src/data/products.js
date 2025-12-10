@@ -5,6 +5,9 @@ export const PRODUCTS = [
     price: 86.25,
     qty: 1,
     image: "https://boots.scene7.com/is/image/Boots/10099324?op_sharpen=1",
+    measurementUnit: "L",
+    netContents: 0.1,
+    isBundle: false,
   },
   {
     id: "p2",
@@ -12,5 +15,18 @@ export const PRODUCTS = [
     price: 28.75,
     qty: 1,
     image: "https://boots.scene7.com/is/image/Boots/10342780?op_sharpen=1",
+    measurementUnit: "KG",
+    netContents: 0.08,
+    isBundle: false,
+  },
+  {
+    id: "p3",
+    name: "Pack of 3 Boots double faced oval cotton wool pads 50",
+    price: 3.58,
+    qty: 1,
+    image: "https://boots.scene7.com/is/image/Boots/10283515?op_sharpen=1",
+    measurementUnit: "KG",
+    netContents: 0.003,
+    isBundle: true,
   },
 ];

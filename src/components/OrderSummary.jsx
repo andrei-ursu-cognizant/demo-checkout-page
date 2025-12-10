@@ -30,6 +30,12 @@ export default function OrderSummary({ giftCard, offer, delivery }) {
 
   const total = Math.max(0, subtotal - giftValue - offerValue + deliveryCost);
 
+  const getProductContents = (product) => {
+    return `${product.netContents} ${product.measurementUnit} | £${(
+      product.price / product.netContents
+    ).toFixed(1)} per ${product.measurementUnit}`;
+  };
+
   return (
     <div className="card">
       <h3>Order summary</h3>
@@ -54,6 +60,7 @@ export default function OrderSummary({ giftCard, offer, delivery }) {
               <div className="product-name">{p.name}</div>
               <div className="product-qty">Qty: {p.qty}</div>
               <div className="product-price">£{p.price.toFixed(2)}</div>
+              <div className="product-contents">{getProductContents(p)}</div>
             </div>
           </div>
         ))}
