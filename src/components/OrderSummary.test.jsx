@@ -223,4 +223,61 @@ describe("OrderSummary Component", () => {
     render(<OrderSummary {...props} />);
     expect(screen.getByText("Free")).toBeInTheDocument();
   });
+
+  it("converts KG to g (lowercase) for regular products", () => {
+    render(<OrderSummary {...defaultProps} />);
+    // p2: KG 0.08 -> g 80
+    expect(screen.getByText(/80 g/)).toBeInTheDocument();
+  });
+
+  it("converts L to ml (lowercase) for regular products", () => {
+    render(<OrderSummary {...defaultProps} />);
+    // p1: L 0.1 -> ml 100
+    expect(screen.getByText(/100 ml/)).toBeInTheDocument();
+  });
+
+  it("uses original netContents for price per unit calculation (not converted)", () => {
+    render(<OrderSummary {...defaultProps} />);
+    // p1: £86.25 / 0.1 (original) = £862.50, but displayed as 100 ml
+    expect(screen.getByText(/100 ml \| £862.50 per L/)).toBeInTheDocument();
+    // p2: £28.75 / 0.08 (original) = £359.38, but displayed as 80 g
+    expect(screen.getByText(/80 g \| £359.38 per KG/)).toBeInTheDocument();
+  });
+
+  it("hides price per unit for same-item bundles with netContents <= 5g/5ml", () => {
+    render(<OrderSummary {...defaultProps} />);
+    // p3: same-item bundle KG 0.003 -> g 3 (converted, <= 5)
+    const text3g = screen.getByText(/3 g$/);
+    // Should not contain "per" (meaning no price per unit)
+    expect(text3g.textContent).not.toContain("per");
+  });
+
+  it("displays mixed bundle without unit conversion", () => {
+    render(<OrderSummary {...defaultProps} />);
+    // p4: mixed bundle (isSameItemBundle: false) keeps original L unit
+    expect(screen.getByText(/1.35 L/)).toBeInTheDocument();
+  });
+
+  it("displays price per unit for mixed bundle using original unit", () => {
+    render(<OrderSummary {...defaultProps} />);
+    // p4: £12.85 / 1.35 L = £9.52 per L (no conversion)
+    expect(screen.getByText(/£9.52 per L/)).toBeInTheDocument();
+  });
+
+  it("uses toFixed(2) for price per unit precision", () => {
+    render(<OrderSummary {...defaultProps} />);
+    // All price values should have 2 decimal places
+    expect(screen.getByText(/£862.50 per L/)).toBeInTheDocument();
+    expect(screen.getByText(/£359.38 per KG/)).toBeInTheDocument();
+    expect(screen.getByText(/£9.52 per L/)).toBeInTheDocument();
+  });
+
+  it("converts same-item bundle unit and value but hides price if <= 5", () => {
+    render(<OrderSummary {...defaultProps} />);
+    // p3: same-item bundle with KG 0.003 -> g 3, no price shown
+    const elements = screen.queryAllByText(/3 g/);
+    const bundleElement = elements.find((el) => !el.textContent.includes("|"));
+    expect(bundleElement).toBeInTheDocument();
+    expect(bundleElement?.textContent).toBe("3 g");
+  });
 });

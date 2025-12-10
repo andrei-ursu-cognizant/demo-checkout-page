@@ -30,10 +30,37 @@ export default function OrderSummary({ giftCard, offer, delivery }) {
 
   const total = Math.max(0, subtotal - giftValue - offerValue + deliveryCost);
 
+  // Convert KG->g or L->ml (lowercase) and return converted unit and netContents
+  const convertUnit = (product) => {
+    const { measurementUnit, netContents } = product;
+
+    if (measurementUnit === "KG") {
+      return { unit: "g", contents: netContents * 1000 };
+    } else if (measurementUnit === "L") {
+      return { unit: "ml", contents: netContents * 1000 };
+    }
+    return { unit: measurementUnit, contents: netContents };
+  };
+
   const getProductContents = (product) => {
-    return `${product.netContents} ${product.measurementUnit} | £${(
+    // For mixed bundles (isSameItemBundle: false), don't apply any conversion
+    if (product.isBundle && !product.isSameItemBundle) {
+      return `${product.netContents} ${product.measurementUnit} | £${(
+        product.price / product.netContents
+      ).toFixed(2)} per ${product.measurementUnit}`;
+    }
+
+    const converted = convertUnit(product);
+
+    // For same-item bundles with netContents <= 5g/5ml, hide price per unit
+    if (product.isSameItemBundle && converted.contents <= 5) {
+      return `${converted.contents} ${converted.unit}`;
+    }
+
+    // Display converted unit and value on left, use original netContents for price per unit on right
+    return `${converted.contents} ${converted.unit} | £${(
       product.price / product.netContents
-    ).toFixed(1)} per ${product.measurementUnit}`;
+    ).toFixed(2)} per ${product.measurementUnit}`;
   };
 
   return (
