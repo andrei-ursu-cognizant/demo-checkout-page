@@ -26,3 +26,5 @@ Notes:
 
 - The app uses webpack + babel and ships a small UI with 4-step checkout flow (details, delivery, gift card, payment).
 - Data persists to localStorage under key `demo_checkout_v1`.
+
+TEST
