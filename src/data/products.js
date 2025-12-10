@@ -8,6 +8,7 @@ export const PRODUCTS = [
     measurementUnit: "L",
     netContents: 0.1,
     isBundle: false,
+    isSameItemBundle: false,
   },
   {
     id: "p2",
@@ -18,6 +19,7 @@ export const PRODUCTS = [
     measurementUnit: "KG",
     netContents: 0.08,
     isBundle: false,
+    isSameItemBundle: false,
   },
   {
     id: "p3",
@@ -28,5 +30,17 @@ export const PRODUCTS = [
     measurementUnit: "KG",
     netContents: 0.003,
     isBundle: true,
+    isSameItemBundle: true,
+  },
+  {
+    id: "p4",
+    name: "L'Oreal Men Expert Toiletries Bundle",
+    price: 12.85,
+    qty: 1,
+    image: "https://boots.scene7.com/is/image/Boots/10367864?op_sharpen=1",
+    measurementUnit: "L",
+    netContents: 1.35,
+    isBundle: true,
+    isSameItemBundle: false,
   },
 ];
