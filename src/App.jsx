@@ -57,9 +57,32 @@ export default function App() {
       alert("Please finish details and delivery before placing order");
       return;
     }
-    setOrderInfo({ user, delivery, gift, payment: paymentInfo });
-    setOrderPlaced(true);
-    // clearState(); // keep state for demo
+
+    // POST order to backend
+    const orderData = { user, delivery, gift, payment: paymentInfo };
+    
+    fetch("http://localhost:5000/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to place order");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Order placed successfully:", data);
+        setOrderInfo({ ...orderData, orderId: data.orderId });
+        setOrderPlaced(true);
+      })
+      .catch((error) => {
+        console.error("Error placing order:", error);
+        alert("Failed to place order. Please try again.");
+      });
   }
 
   if (orderPlaced) {

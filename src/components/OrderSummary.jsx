@@ -1,12 +1,38 @@
-import React, { useState } from "react";
-import { PRODUCTS } from "../data/products";
+import React, { useState, useEffect } from "react";
 
 export default function OrderSummary({ giftCard, offer, delivery }) {
   const [code, setCode] = useState("");
   const [msg, setMsg] = useState("");
   const [appliedOffer, setAppliedOffer] = useState(offer || null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const subtotal = PRODUCTS.reduce((s, p) => s + p.price * p.qty, 0);
+  // Fetch products from backend API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("http://localhost:5000/api/products");
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const data = await response.json();
+        setProducts(data);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError(err.message);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const subtotal = products.reduce((s, p) => s + p.price * p.qty, 0);
 
   function apply() {
     if (code === "DEMO123") {
@@ -30,17 +56,54 @@ export default function OrderSummary({ giftCard, offer, delivery }) {
 
   const total = Math.max(0, subtotal - giftValue - offerValue + deliveryCost);
 
+  // Convert KG->g or L->ml (lowercase) and return converted unit and netContents
+  const convertUnit = (product) => {
+    const { measurementUnit, netContents } = product;
+    if (measurementUnit === "KG") {
+      return { unit: "g", contents: netContents * 1000 };
+    } else if (measurementUnit === "L") {
+      return { unit: "ml", contents: netContents * 1000 };
+    }
+    return { unit: measurementUnit, contents: netContents };
+  };
+
   const getProductContents = (product) => {
-    return `${product.netContents} ${product.measurementUnit} | £${(
+    // For mixed bundles (isSameItemBundle: false), no changes apply
+    if (product.isBundle && !product.isSameItemBundle) {
+      return `${product.netContents} ${product.measurementUnit} | £${(
+        product.price / product.netContents
+      ).toFixed(2)} per ${product.measurementUnit}`;
+    }
+
+    // For same-item bundles, convert unit/value but hide price if <= 5g/5ml
+    if (product.isSameItemBundle) {
+      const converted = convertUnit(product);
+      if (converted.contents <= 5) {
+        return `${converted.contents} ${converted.unit}`;
+      }
+      return `${converted.contents} ${converted.unit} | £${(
+        product.price / product.netContents
+      ).toFixed(2)} per ${product.measurementUnit}`;
+    }
+
+    // For regular products, convert unit/value but use original netContents for price
+    const converted = convertUnit(product);
+    return `${converted.contents} ${converted.unit} | £${(
       product.price / product.netContents
-    ).toFixed(1)} per ${product.measurementUnit}`;
+    ).toFixed(2)} per ${product.measurementUnit}`;
   };
 
   return (
     <div className="card">
       <h3>Order summary</h3>
-      <div style={{ marginBottom: 16 }}>
-        {PRODUCTS.map((p) => (
+      
+      {loading && <div style={{ textAlign: "center", padding: "20px" }}>Loading products...</div>}
+      
+      {error && <div style={{ color: "#d32f2f", padding: "10px", marginBottom: "10px" }}>Error: {error}</div>}
+      
+      {!loading && !error && (
+        <div style={{ marginBottom: 16 }}>
+          {products.map((p) => (
           <div key={p.id} className="product-card">
             <img
               src={p.image}
@@ -64,7 +127,8 @@ export default function OrderSummary({ giftCard, offer, delivery }) {
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      )}
 
       <hr />
       <div className="form-row">
