@@ -1,0 +1,18 @@
+{
+  "name": "demo-checkout-backend",
+  "version": "1.0.0",
+  "description": "Backend server for demo checkout application",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}
