@@ -96,37 +96,47 @@ export default function OrderSummary({ giftCard, offer, delivery }) {
   return (
     <div className="card">
       <h3>Order summary</h3>
-      
-      {loading && <div style={{ textAlign: "center", padding: "20px" }}>Loading products...</div>}
-      
-      {error && <div style={{ color: "#d32f2f", padding: "10px", marginBottom: "10px" }}>Error: {error}</div>}
-      
+
+      {loading && (
+        <div style={{ textAlign: "center", padding: "20px" }}>
+          Loading products...
+        </div>
+      )}
+
+      {error && (
+        <div
+          style={{ color: "#d32f2f", padding: "10px", marginBottom: "10px" }}
+        >
+          Error: {error}
+        </div>
+      )}
+
       {!loading && !error && (
         <div style={{ marginBottom: 16 }}>
           {products.map((p) => (
-          <div key={p.id} className="product-card">
-            <img
-              src={p.image}
-              alt={p.name}
-              className="product-image"
-              onError={(e) => {
-                // show a lightweight inline placeholder when image fails
-                e.currentTarget.onerror = null;
-                e.currentTarget.src =
-                  "data:image/svg+xml;utf8," +
-                  encodeURIComponent(
-                    `<svg xmlns='http://www.w3.org/2000/svg' width='100' height='120'><rect width='100%' height='100%' fill='%23eee'/><text x='50%' y='50%' fill='%23999' font-size='12' font-family='Arial' dominant-baseline='middle' text-anchor='middle'>No image</text></svg>`
-                  );
-              }}
-            />
-            <div className="product-info">
-              <div className="product-name">{p.name}</div>
-              <div className="product-qty">Qty: {p.qty}</div>
-              <div className="product-price">£{p.price.toFixed(2)}</div>
-              <div className="product-contents">{getProductContents(p)}</div>
+            <div key={p.id} className="product-card">
+              <img
+                src={p.image}
+                alt={p.name}
+                className="product-image"
+                onError={(e) => {
+                  // show a lightweight inline placeholder when image fails
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src =
+                    "data:image/svg+xml;utf8," +
+                    encodeURIComponent(
+                      `<svg xmlns='http://www.w3.org/2000/svg' width='100' height='120'><rect width='100%' height='100%' fill='%23eee'/><text x='50%' y='50%' fill='%23999' font-size='12' font-family='Arial' dominant-baseline='middle' text-anchor='middle'>No image</text></svg>`,
+                    );
+                }}
+              />
+              <div className="product-info">
+                <div className="product-name">{p.name}</div>
+                <div className="product-qty">Qty: {p.qty}</div>
+                <div className="product-price">£{p.price.toFixed(2)}</div>
+                <div className="product-contents">{getProductContents(p)}</div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         </div>
       )}
 
