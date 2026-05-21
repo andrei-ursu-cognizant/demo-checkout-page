@@ -434,4 +434,74 @@ describe("Delivery Component", () => {
 
     expect(screen.getByText(/Boots High St, London/)).toBeInTheDocument();
   });
+
+  it("includes deliveryOpt in onSelect callback when next day is selected", async () => {
+    const props = {
+      ...defaultProps,
+      data: { type: "home", selected: "10 Downing St, London, SW1A 2AA" },
+    };
+    render(<Delivery {...props} />);
+
+    const nextDayRadio = screen.getByLabelText(/Next Day Delivery/i);
+    fireEvent.click(nextDayRadio);
+
+    await waitFor(() => {
+      expect(defaultProps.onSelect).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: "home",
+          selected: "10 Downing St, London, SW1A 2AA",
+          deliveryOpt: "next",
+        })
+      );
+    });
+  });
+
+  it("includes deliveryOpt in onSelect callback when standard is selected", async () => {
+    const props = {
+      ...defaultProps,
+      data: {
+        type: "home",
+        selected: "10 Downing St, London, SW1A 2AA",
+        deliveryOpt: "next",
+      },
+    };
+    render(<Delivery {...props} />);
+
+    const standardRadio = screen.getByLabelText(/Standard Delivery/i);
+    fireEvent.click(standardRadio);
+
+    await waitFor(() => {
+      expect(defaultProps.onSelect).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: "home",
+          selected: "10 Downing St, London, SW1A 2AA",
+          deliveryOpt: "standard",
+        })
+      );
+    });
+  });
+
+  it("includes pickupDate in onSelect callback when date is selected", async () => {
+    const props = {
+      ...defaultProps,
+      data: { type: "store", selected: "Boots High St, London" },
+    };
+    render(<Delivery {...props} />);
+
+    // Get the first date button and click it
+    const dateButtons = screen.getAllByRole("radio", { hidden: true });
+    if (dateButtons.length > 0) {
+      fireEvent.click(dateButtons[0].closest("label"));
+
+      await waitFor(() => {
+        expect(defaultProps.onSelect).toHaveBeenCalledWith(
+          expect.objectContaining({
+            type: "store",
+            selected: "Boots High St, London",
+            pickupDate: expect.any(String),
+          })
+        );
+      });
+    }
+  });
 });

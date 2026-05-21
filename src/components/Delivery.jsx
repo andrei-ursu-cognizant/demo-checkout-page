@@ -235,7 +235,15 @@ export default function Delivery({ data, onSelect, onContinue }) {
                         type="radio"
                         name="d"
                         checked={deliveryOpt === "standard"}
-                        onChange={() => setDeliveryOpt("standard")}
+                        onChange={() => {
+                          setDeliveryOpt("standard");
+                          onSelect({
+                            type: tab,
+                            selected: selectedByTab[tab],
+                            deliveryOpt: "standard",
+                            pickupDate,
+                          });
+                        }}
                       />{" "}
                       Standard Delivery
                     </label>
@@ -249,7 +257,15 @@ export default function Delivery({ data, onSelect, onContinue }) {
                         type="radio"
                         name="d"
                         checked={deliveryOpt === "next"}
-                        onChange={() => setDeliveryOpt("next")}
+                        onChange={() => {
+                          setDeliveryOpt("next");
+                          onSelect({
+                            type: tab,
+                            selected: selectedByTab[tab],
+                            deliveryOpt: "next",
+                            pickupDate,
+                          });
+                        }}
                       />{" "}
                       Next Day Delivery
                     </label>
@@ -289,7 +305,15 @@ export default function Delivery({ data, onSelect, onContinue }) {
                         minWidth: 80,
                         textAlign: "center",
                       }}
-                      onClick={() => setPickupDate(label)}
+                      onClick={() => {
+                        setPickupDate(label);
+                        onSelect({
+                          type: tab,
+                          selected: selectedByTab[tab],
+                          deliveryOpt,
+                          pickupDate: label,
+                        });
+                      }}
                     >
                       <input
                         type="radio"

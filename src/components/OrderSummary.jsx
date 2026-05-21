@@ -46,13 +46,23 @@ export default function OrderSummary({ giftCard, offer, delivery }) {
 
   const giftValue = giftCard ? giftCard.value || 0 : 0;
   const offerValue = appliedOffer ? appliedOffer.value : 0;
-  const deliveryCost = delivery
-    ? delivery.type === "home"
-      ? delivery.deliveryOpt === "next"
-        ? 5.95
-        : 0
-      : 0
-    : 0;
+  
+  // Calculate delivery cost based on type and subtotal
+  let deliveryCost = 0;
+  if (delivery) {
+    if (delivery.type === "home") {
+      // Home delivery
+      if (delivery.deliveryOpt === "next") {
+        deliveryCost = 5.95; // Next day is always £5.95
+      } else {
+        // Standard delivery: £3.50 if subtotal < £45, free if >= £45
+        deliveryCost = subtotal < 45 ? 3.5 : 0;
+      }
+    } else if (delivery.type === "store") {
+      // Click & collect: £2.50 if subtotal < £20, free if >= £20
+      deliveryCost = subtotal < 20 ? 2.5 : 0;
+    }
+  }
 
   const total = Math.max(0, subtotal - giftValue - offerValue + deliveryCost);
 

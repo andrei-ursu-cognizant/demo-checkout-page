@@ -397,4 +397,335 @@ describe("OrderSummary Component", () => {
       expect(cardContent).toMatch(/359.38 per KG/);
     });
   });
+
+  describe("Delivery Cost Calculation", () => {
+    beforeEach(() => {
+      global.fetch = jest.fn();
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it("standard home delivery: £3.50 when subtotal < £45", async () => {
+      const lowSubtotalProducts = [
+        {
+          id: 1,
+          name: "Low Cost Item",
+          price: 30,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => lowSubtotalProducts,
+      });
+
+      const props = {
+        ...defaultProps,
+        delivery: { type: "home", deliveryOpt: "standard", selected: "123 Test St" },
+      };
+
+      render(<OrderSummary {...props} />);
+
+      await waitFor(() => {
+        expect(screen.getByText("£3.50")).toBeInTheDocument();
+      });
+    });
+
+    it("standard home delivery: free when subtotal >= £45", async () => {
+      const highSubtotalProducts = [
+        {
+          id: 1,
+          name: "High Cost Item",
+          price: 50,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => highSubtotalProducts,
+      });
+
+      const props = {
+        ...defaultProps,
+        delivery: { type: "home", deliveryOpt: "standard", selected: "123 Test St" },
+      };
+
+      render(<OrderSummary {...props} />);
+
+      await waitFor(() => {
+        // Find the Delivery row and check it shows Free (not a price)
+        const deliveryRows = screen.getAllByText("Delivery");
+        const deliveryRow = deliveryRows[0].closest(".summary-row");
+        expect(deliveryRow).toHaveTextContent("Free");
+      });
+    });
+
+    it("next day delivery: always £5.95 regardless of subtotal", async () => {
+      const lowSubtotalProducts = [
+        {
+          id: 1,
+          name: "Low Cost Item",
+          price: 10,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => lowSubtotalProducts,
+      });
+
+      const props = {
+        ...defaultProps,
+        delivery: { type: "home", deliveryOpt: "next", selected: "123 Test St" },
+      };
+
+      render(<OrderSummary {...props} />);
+
+      await waitFor(() => {
+        expect(screen.getByText("£5.95")).toBeInTheDocument();
+      });
+    });
+
+    it("click & collect: £2.50 when subtotal < £20", async () => {
+      const lowSubtotalProducts = [
+        {
+          id: 1,
+          name: "Low Cost Item",
+          price: 15,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => lowSubtotalProducts,
+      });
+
+      const props = {
+        ...defaultProps,
+        delivery: { type: "store", selected: "Boots High St" },
+      };
+
+      render(<OrderSummary {...props} />);
+
+      await waitFor(() => {
+        expect(screen.getByText("£2.50")).toBeInTheDocument();
+      });
+    });
+
+    it("click & collect: free when subtotal >= £20", async () => {
+      const highSubtotalProducts = [
+        {
+          id: 1,
+          name: "High Cost Item",
+          price: 25,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => highSubtotalProducts,
+      });
+
+      const props = {
+        ...defaultProps,
+        delivery: { type: "store", selected: "Boots High St" },
+      };
+
+      render(<OrderSummary {...props} />);
+
+      await waitFor(() => {
+        const deliveryRows = screen.getAllByText("Delivery");
+        const deliveryRow = deliveryRows[0].closest(".summary-row");
+        expect(deliveryRow).toHaveTextContent("Free");
+      });
+    });
+
+    it("delivery cost updates when delivery method changes from standard to next day", async () => {
+      const testProducts = [
+        {
+          id: 1,
+          name: "Test Item",
+          price: 30,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValue({
+        ok: true,
+        json: async () => testProducts,
+      });
+
+      const { rerender } = render(
+        <OrderSummary
+          {...defaultProps}
+          delivery={{ type: "home", deliveryOpt: "standard", selected: "123 Test St" }}
+        />
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText("£3.50")).toBeInTheDocument();
+      });
+
+      // Re-render with next day delivery
+      rerender(
+        <OrderSummary
+          {...defaultProps}
+          delivery={{ type: "home", deliveryOpt: "next", selected: "123 Test St" }}
+        />
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText("£5.95")).toBeInTheDocument();
+      });
+    });
+
+    it("standard home delivery boundary: £3.50 at exactly £44.99 subtotal", async () => {
+      const boundaryProducts = [
+        {
+          id: 1,
+          name: "Boundary Item",
+          price: 44.99,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => boundaryProducts,
+      });
+
+      const props = {
+        ...defaultProps,
+        delivery: { type: "home", deliveryOpt: "standard", selected: "123 Test St" },
+      };
+
+      render(<OrderSummary {...props} />);
+
+      await waitFor(() => {
+        expect(screen.getByText("£3.50")).toBeInTheDocument();
+      });
+    });
+
+    it("standard home delivery boundary: free at exactly £45.00 subtotal", async () => {
+      const boundaryProducts = [
+        {
+          id: 1,
+          name: "Boundary Item",
+          price: 45.0,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => boundaryProducts,
+      });
+
+      const props = {
+        ...defaultProps,
+        delivery: { type: "home", deliveryOpt: "standard", selected: "123 Test St" },
+      };
+
+      render(<OrderSummary {...props} />);
+
+      await waitFor(() => {
+        const deliveryRows = screen.getAllByText("Delivery");
+        const deliveryRow = deliveryRows[0].closest(".summary-row");
+        expect(deliveryRow).toHaveTextContent("Free");
+      });
+    });
+
+    it("click & collect boundary: £2.50 at exactly £19.99 subtotal", async () => {
+      const boundaryProducts = [
+        {
+          id: 1,
+          name: "Boundary Item",
+          price: 19.99,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => boundaryProducts,
+      });
+
+      const props = {
+        ...defaultProps,
+        delivery: { type: "store", selected: "Boots High St" },
+      };
+
+      render(<OrderSummary {...props} />);
+
+      await waitFor(() => {
+        expect(screen.getByText("£2.50")).toBeInTheDocument();
+      });
+    });
+
+    it("click & collect boundary: free at exactly £20.00 subtotal", async () => {
+      const boundaryProducts = [
+        {
+          id: 1,
+          name: "Boundary Item",
+          price: 20.0,
+          qty: 1,
+          image: "test.jpg",
+          measurementUnit: "each",
+          netContents: 1,
+        },
+      ];
+
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => boundaryProducts,
+      });
+
+      const props = {
+        ...defaultProps,
+        delivery: { type: "store", selected: "Boots High St" },
+      };
+
+      render(<OrderSummary {...props} />);
+
+      await waitFor(() => {
+        const deliveryRows = screen.getAllByText("Delivery");
+        const deliveryRow = deliveryRows[0].closest(".summary-row");
+        expect(deliveryRow).toHaveTextContent("Free");
+      });
+    });
+  });
 });
