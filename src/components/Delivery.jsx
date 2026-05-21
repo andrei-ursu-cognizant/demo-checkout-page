@@ -22,7 +22,7 @@ export default function Delivery({ data, onSelect, onContinue }) {
     store: data.type === "store" ? data.selected || null : null,
   });
   const [deliveryOpt, setDeliveryOpt] = useState(
-    data.deliveryOpt || "standard"
+    data.deliveryOpt || "standard",
   );
   const [pickupDate, setPickupDate] = useState(data.pickupDate || null);
   const [showModal, setShowModal] = useState(false);
@@ -31,7 +31,7 @@ export default function Delivery({ data, onSelect, onContinue }) {
 
   const suggestions = useMemo(
     () => (tab === "home" ? HOME_SUGGESTIONS : STORE_SUGGESTIONS),
-    [tab]
+    [tab],
   );
 
   function handleSelect(addr) {

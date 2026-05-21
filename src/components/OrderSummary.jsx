@@ -46,7 +46,7 @@ export default function OrderSummary({ giftCard, offer, delivery }) {
 
   const giftValue = giftCard ? giftCard.value || 0 : 0;
   const offerValue = appliedOffer ? appliedOffer.value : 0;
-  
+
   // Calculate delivery cost based on type and subtotal
   let deliveryCost = 0;
   if (delivery) {

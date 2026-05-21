@@ -28,14 +28,14 @@ describe("Delivery Component", () => {
   it("shows postcode input when no address selected", () => {
     render(<Delivery {...defaultProps} />);
     expect(
-      screen.getByPlaceholderText(/Enter postcode or city/i)
+      screen.getByPlaceholderText(/Enter postcode or city/i),
     ).toBeInTheDocument();
   });
 
   it("opens modal when postcode input is focused", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
@@ -47,13 +47,13 @@ describe("Delivery Component", () => {
   it("shows suggestions after typing 3+ characters in modal", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
     await waitFor(() => {
       const modalInput = screen.getByPlaceholderText(
-        /Enter post code or place/i
+        /Enter post code or place/i,
       );
       expect(modalInput).toBeInTheDocument();
     });
@@ -69,13 +69,13 @@ describe("Delivery Component", () => {
   it("does not show suggestions with less than 3 characters", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
     await waitFor(() => {
       const modalInput = screen.getByPlaceholderText(
-        /Enter post code or place/i
+        /Enter post code or place/i,
       );
       expect(modalInput).toBeInTheDocument();
     });
@@ -90,13 +90,13 @@ describe("Delivery Component", () => {
   it("selects address from suggestions and confirms", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
     await waitFor(() => {
       const modalInput = screen.getByPlaceholderText(
-        /Enter post code or place/i
+        /Enter post code or place/i,
       );
       expect(modalInput).toBeInTheDocument();
     });
@@ -122,7 +122,7 @@ describe("Delivery Component", () => {
   it("closes modal when cancel is clicked", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
@@ -141,7 +141,7 @@ describe("Delivery Component", () => {
   it("closes modal when clicking outside overlay", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
@@ -160,13 +160,13 @@ describe("Delivery Component", () => {
   it("shows delivery address label for home tab", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
     await waitFor(() => {
       const modalInput = screen.getByPlaceholderText(
-        /Enter post code or place/i
+        /Enter post code or place/i,
       );
       expect(modalInput).toBeInTheDocument();
     });
@@ -196,12 +196,12 @@ describe("Delivery Component", () => {
 
     await waitFor(() => {
       expect(defaultProps.onSelect).toHaveBeenCalledWith(
-        expect.objectContaining({ type: "store" })
+        expect.objectContaining({ type: "store" }),
       );
     });
 
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
@@ -234,7 +234,7 @@ describe("Delivery Component", () => {
     };
     render(<Delivery {...props} />);
     expect(
-      screen.getByText(/10 Downing St, London, SW1A 2AA/)
+      screen.getByText(/10 Downing St, London, SW1A 2AA/),
     ).toBeInTheDocument();
     expect(screen.getByText(/Edit this address/i)).toBeInTheDocument();
   });
@@ -280,7 +280,7 @@ describe("Delivery Component", () => {
 
     await waitFor(() => {
       expect(defaultProps.onSelect).toHaveBeenCalledWith(
-        expect.objectContaining({ selected: null })
+        expect.objectContaining({ selected: null }),
       );
     });
   });
@@ -290,13 +290,13 @@ describe("Delivery Component", () => {
 
     // Select home address
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
     await waitFor(() => {
       const modalInput = screen.getByPlaceholderText(
-        /Enter post code or place/i
+        /Enter post code or place/i,
       );
       expect(modalInput).toBeInTheDocument();
     });
@@ -325,7 +325,7 @@ describe("Delivery Component", () => {
     await waitFor(() => {
       // Store selection should be empty
       expect(
-        screen.getByPlaceholderText(/Enter postcode or city/i)
+        screen.getByPlaceholderText(/Enter postcode or city/i),
       ).toBeInTheDocument();
     });
   });
@@ -348,7 +348,7 @@ describe("Delivery Component", () => {
   it("closes modal when X button is clicked", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
@@ -367,7 +367,7 @@ describe("Delivery Component", () => {
   it("does not confirm selection without entering text or selecting", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
@@ -380,20 +380,20 @@ describe("Delivery Component", () => {
 
     // onSelect should not be called with empty address
     expect(defaultProps.onSelect).not.toHaveBeenCalledWith(
-      expect.objectContaining({ selected: "" })
+      expect.objectContaining({ selected: "" }),
     );
   });
 
   it("confirms modal selection with manually typed address", async () => {
     render(<Delivery {...defaultProps} />);
     const postcodeInput = screen.getByPlaceholderText(
-      /Enter postcode or city/i
+      /Enter postcode or city/i,
     );
     fireEvent.focus(postcodeInput);
 
     await waitFor(() => {
       const modalInput = screen.getByPlaceholderText(
-        /Enter post code or place/i
+        /Enter post code or place/i,
       );
       expect(modalInput).toBeInTheDocument();
     });
@@ -406,7 +406,7 @@ describe("Delivery Component", () => {
 
     await waitFor(() => {
       expect(defaultProps.onSelect).toHaveBeenCalledWith(
-        expect.objectContaining({ selected: "Custom Address, London" })
+        expect.objectContaining({ selected: "Custom Address, London" }),
       );
     });
   });
@@ -451,7 +451,7 @@ describe("Delivery Component", () => {
           type: "home",
           selected: "10 Downing St, London, SW1A 2AA",
           deliveryOpt: "next",
-        })
+        }),
       );
     });
   });
@@ -476,7 +476,7 @@ describe("Delivery Component", () => {
           type: "home",
           selected: "10 Downing St, London, SW1A 2AA",
           deliveryOpt: "standard",
-        })
+        }),
       );
     });
   });
@@ -499,7 +499,7 @@ describe("Delivery Component", () => {
             type: "store",
             selected: "Boots High St, London",
             pickupDate: expect.any(String),
-          })
+          }),
         );
       });
     }

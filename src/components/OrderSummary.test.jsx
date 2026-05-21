@@ -427,7 +427,11 @@ describe("OrderSummary Component", () => {
 
       const props = {
         ...defaultProps,
-        delivery: { type: "home", deliveryOpt: "standard", selected: "123 Test St" },
+        delivery: {
+          type: "home",
+          deliveryOpt: "standard",
+          selected: "123 Test St",
+        },
       };
 
       render(<OrderSummary {...props} />);
@@ -457,7 +461,11 @@ describe("OrderSummary Component", () => {
 
       const props = {
         ...defaultProps,
-        delivery: { type: "home", deliveryOpt: "standard", selected: "123 Test St" },
+        delivery: {
+          type: "home",
+          deliveryOpt: "standard",
+          selected: "123 Test St",
+        },
       };
 
       render(<OrderSummary {...props} />);
@@ -490,7 +498,11 @@ describe("OrderSummary Component", () => {
 
       const props = {
         ...defaultProps,
-        delivery: { type: "home", deliveryOpt: "next", selected: "123 Test St" },
+        delivery: {
+          type: "home",
+          deliveryOpt: "next",
+          selected: "123 Test St",
+        },
       };
 
       render(<OrderSummary {...props} />);
@@ -583,8 +595,12 @@ describe("OrderSummary Component", () => {
       const { rerender } = render(
         <OrderSummary
           {...defaultProps}
-          delivery={{ type: "home", deliveryOpt: "standard", selected: "123 Test St" }}
-        />
+          delivery={{
+            type: "home",
+            deliveryOpt: "standard",
+            selected: "123 Test St",
+          }}
+        />,
       );
 
       await waitFor(() => {
@@ -595,8 +611,12 @@ describe("OrderSummary Component", () => {
       rerender(
         <OrderSummary
           {...defaultProps}
-          delivery={{ type: "home", deliveryOpt: "next", selected: "123 Test St" }}
-        />
+          delivery={{
+            type: "home",
+            deliveryOpt: "next",
+            selected: "123 Test St",
+          }}
+        />,
       );
 
       await waitFor(() => {
@@ -624,7 +644,11 @@ describe("OrderSummary Component", () => {
 
       const props = {
         ...defaultProps,
-        delivery: { type: "home", deliveryOpt: "standard", selected: "123 Test St" },
+        delivery: {
+          type: "home",
+          deliveryOpt: "standard",
+          selected: "123 Test St",
+        },
       };
 
       render(<OrderSummary {...props} />);
@@ -654,7 +678,11 @@ describe("OrderSummary Component", () => {
 
       const props = {
         ...defaultProps,
-        delivery: { type: "home", deliveryOpt: "standard", selected: "123 Test St" },
+        delivery: {
+          type: "home",
+          deliveryOpt: "standard",
+          selected: "123 Test St",
+        },
       };
 
       render(<OrderSummary {...props} />);
