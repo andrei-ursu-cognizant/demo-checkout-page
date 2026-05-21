@@ -1,27 +1,5 @@
 [
   {
-    "id": "p1",
-    "name": "Tom Ford Black Orchid Eau de Parfum Spray 100ml",
-    "price": 86.25,
-    "qty": 1,
-    "image": "https://boots.scene7.com/is/image/Boots/10099324?op_sharpen=1",
-    "measurementUnit": "L",
-    "netContents": 0.1,
-    "isBundle": false,
-    "isSameItemBundle": false
-  },
-  {
-    "id": "p2",
-    "name": "YSL Rouge Volupté Candy Glaze Lipstick",
-    "price": 28.75,
-    "qty": 1,
-    "image": "https://boots.scene7.com/is/image/Boots/10342780?op_sharpen=1",
-    "measurementUnit": "KG",
-    "netContents": 0.08,
-    "isBundle": false,
-    "isSameItemBundle": false
-  },
-  {
     "id": "p3",
     "name": "Pack of 3 Boots double faced oval cotton wool pads 50",
     "price": 3.58,
@@ -31,16 +9,5 @@
     "netContents": 0.003,
     "isBundle": true,
     "isSameItemBundle": true
-  },
-  {
-    "id": "p4",
-    "name": "L'Oreal Men Expert Toiletries Bundle",
-    "price": 12.85,
-    "qty": 1,
-    "image": "https://boots.scene7.com/is/image/Boots/10367864?op_sharpen=1",
-    "measurementUnit": "L",
-    "netContents": 1.35,
-    "isBundle": true,
-    "isSameItemBundle": false
   }
 ]

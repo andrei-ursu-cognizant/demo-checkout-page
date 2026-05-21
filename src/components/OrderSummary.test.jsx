@@ -98,22 +98,32 @@ describe("OrderSummary Component", () => {
     expect(rows.length).toBeGreaterThan(0);
   });
 
-  it("shows paid delivery when standard delivery selected", () => {
+  it("shows paid delivery when standard delivery selected", async () => {
     const props = {
       ...defaultProps,
       delivery: { type: "home", deliveryOpt: "standard" },
     };
     render(<OrderSummary {...props} />);
-    expect(screen.getByText("Free")).toBeInTheDocument();
+    // With subtotal of £10 (from mocked products), standard delivery should be £3.50
+    await waitFor(() => {
+      expect(screen.getByText(/£3.50/)).toBeInTheDocument();
+    });
   });
 
-  it("shows next day delivery cost", () => {
+  it("shows next day delivery cost", async () => {
     const props = {
       ...defaultProps,
       delivery: { type: "home", deliveryOpt: "next" },
     };
     render(<OrderSummary {...props} />);
-    expect(screen.getByText(/£5.95/)).toBeInTheDocument();
+    // Find the delivery row specifically
+    await waitFor(() => {
+      const deliveryRows = screen.getAllByText("Delivery");
+      expect(deliveryRows.length).toBeGreaterThan(0);
+      // The delivery cost should show £5.95 in the summary
+      const summarySection = screen.getByText("Total").closest(".card");
+      expect(summarySection.textContent).toMatch(/£5.95/);
+    });
   });
 
   it("shows gift card discount when applied", () => {

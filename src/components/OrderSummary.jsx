@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { calculateDeliveryCost } from "../utils/deliveryCost";
 
 export default function OrderSummary({ giftCard, offer, delivery }) {
   const [code, setCode] = useState("");
@@ -46,13 +47,7 @@ export default function OrderSummary({ giftCard, offer, delivery }) {
 
   const giftValue = giftCard ? giftCard.value || 0 : 0;
   const offerValue = appliedOffer ? appliedOffer.value : 0;
-  const deliveryCost = delivery
-    ? delivery.type === "home"
-      ? delivery.deliveryOpt === "next"
-        ? 5.95
-        : 0
-      : 0
-    : 0;
+  const deliveryCost = calculateDeliveryCost(delivery, subtotal);
 
   const total = Math.max(0, subtotal - giftValue - offerValue + deliveryCost);
 

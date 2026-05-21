@@ -67,6 +67,17 @@ export default function Delivery({ data, onSelect, onContinue }) {
     });
   }
 
+  function handleDeliveryOptChange(opt) {
+    setDeliveryOpt(opt);
+    // Immediately notify parent of the change
+    onSelect({
+      type: tab,
+      selected: selectedByTab[tab],
+      deliveryOpt: opt,
+      pickupDate,
+    });
+  }
+
   const upcomingDates = [
     new Date(Date.now() + 2 * 24 * 3600 * 1000),
     new Date(Date.now() + 3 * 24 * 3600 * 1000),
@@ -228,19 +239,19 @@ export default function Delivery({ data, onSelect, onContinue }) {
             <div>
               <div style={{ marginBottom: 16 }}>
                 <label>Delivery method</label>
-                <div style={{ marginTop: 8 }}>
+            <div style={{ marginTop: 8 }}>
                   <div style={{ marginBottom: 10 }}>
                     <label>
                       <input
                         type="radio"
                         name="d"
                         checked={deliveryOpt === "standard"}
-                        onChange={() => setDeliveryOpt("standard")}
+                        onChange={() => handleDeliveryOptChange("standard")}
                       />{" "}
                       Standard Delivery
                     </label>
                     <div className="small" style={{ marginLeft: 20 }}>
-                      You will receive your order on or before 14/11/2025 — Free
+                      You will receive your order on or before 14/11/2025 — £3.50 (free on orders over £45)
                     </div>
                   </div>
                   <div>
@@ -249,7 +260,7 @@ export default function Delivery({ data, onSelect, onContinue }) {
                         type="radio"
                         name="d"
                         checked={deliveryOpt === "next"}
-                        onChange={() => setDeliveryOpt("next")}
+                        onChange={() => handleDeliveryOptChange("next")}
                       />{" "}
                       Next Day Delivery
                     </label>
@@ -264,6 +275,9 @@ export default function Delivery({ data, onSelect, onContinue }) {
           ) : (
             <div style={{ marginBottom: 16 }}>
               <label>Pick a collection date</label>
+              <div className="small" style={{ marginBottom: 8, color: "#666" }}>
+                Click & Collect — £2.50 (free on orders over £20)
+              </div>
               <div
                 style={{
                   display: "flex",
@@ -289,7 +303,15 @@ export default function Delivery({ data, onSelect, onContinue }) {
                         minWidth: 80,
                         textAlign: "center",
                       }}
-                      onClick={() => setPickupDate(label)}
+                      onClick={() => {
+                        setPickupDate(label);
+                        onSelect({
+                          type: tab,
+                          selected: selectedByTab[tab],
+                          deliveryOpt,
+                          pickupDate: label,
+                        });
+                      }}
                     >
                       <input
                         type="radio"
