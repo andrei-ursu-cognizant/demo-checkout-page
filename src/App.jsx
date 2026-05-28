@@ -13,7 +13,9 @@ export default function App() {
   const saved = loadState();
   const [step, setStep] = useState(saved.step || 0);
   const [user, setUser] = useState(saved.user || {});
-  const [delivery, setDelivery] = useState(saved.delivery || null);
+  const [delivery, setDelivery] = useState(
+    saved.delivery || { type: "home", deliveryOpt: "standard" }
+  );
   const [gift, setGift] = useState(saved.gift || null);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderInfo, setOrderInfo] = useState(null);
@@ -60,7 +62,7 @@ export default function App() {
 
     // POST order to backend
     const orderData = { user, delivery, gift, payment: paymentInfo };
-    
+
     fetch("http://localhost:5000/api/orders", {
       method: "POST",
       headers: {
