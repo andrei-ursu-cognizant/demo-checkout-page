@@ -240,7 +240,7 @@ export default function Delivery({ data, onSelect, onContinue }) {
                       Standard Delivery
                     </label>
                     <div className="small" style={{ marginLeft: 20 }}>
-                      You will receive your order on or before 14/11/2025 — Free
+                      You will receive your order on or before 14/11/2025
                     </div>
                   </div>
                   <div>
@@ -254,8 +254,7 @@ export default function Delivery({ data, onSelect, onContinue }) {
                       Next Day Delivery
                     </label>
                     <div className="small" style={{ marginLeft: 20 }}>
-                      You will receive your order on or before 14/11/2025 —
-                      £5.95
+                      You will receive your order on or before 14/11/2025
                     </div>
                   </div>
                 </div>
